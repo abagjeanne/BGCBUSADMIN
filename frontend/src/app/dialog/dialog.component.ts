@@ -75,36 +75,37 @@ export class DialogComponent implements OnInit {
     }
   }
 
-    saveDriver(): void {
-      const data = {
-        driver_name: this.personalForm.get('driver_name')?.value,
-        plate_number: this.personalForm.get('plate_number')?.value,
-        bus_route: this.personalForm.get('bus_route')?.value,
-        email: this.personalForm.get('email')?.value,
-        password: this.personalForm.get('password')?.value,
-      };
-      console.log(this.editData._id);
-      if (this.editData._id) {
-        var id = this.editData._id;
-        this.driverService.update(id, data).subscribe({
-          next: (res) => {
-            console.log(res);
-            this.submitted = true;
-            window.location.reload();
-          },
-          error: (e) => console.error(e),
-        });
-      } else {
-        this.driverService.create(data).subscribe({
-          next: (res) => {
-            console.log(res);
-            this.submitted = true;
-            window.location.reload();
-          },
-          error: (e) => console.error(e),
-        });
-      }
+  saveDriver(): void {
+    const data = {
+      driver_name: this.personalForm.get('driver_name')?.value,
+      plate_number: this.personalForm.get('plate_number')?.value,
+      bus_route: this.personalForm.get('bus_route')?.value,
+      email: this.personalForm.get('email')?.value,
+      password: this.personalForm.get('password')?.value,
+    };
+  
+    if (this.editData && this.editData._id) { // Check if editData and _id exist
+      const id = this.editData._id;
+      this.driverService.update(id, data).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.submitted = true;
+          this.dialogRef.close(); // Close the dialog after successful update
+        },
+        error: (e) => console.error(e),
+      });
+    } else {
+      this.driverService.create(data).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.submitted = true;
+          this.dialogRef.close(); // Close the dialog after successful creation
+        },
+        error: (e) => console.error(e),
+      });
     }
+  }
+  
 
   newDriver(): void {
     this.submitted = false;

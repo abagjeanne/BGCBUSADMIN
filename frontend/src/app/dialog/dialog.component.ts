@@ -100,9 +100,13 @@ export class DialogComponent implements OnInit {
           console.log(res);
           this.submitted = true;
           this.dialogRef.close(); // Close the dialog after successful creation
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
         },
         error: (e) => console.error(e),
       });
+      
     }
   }
   
